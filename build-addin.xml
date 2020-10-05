@@ -7,9 +7,9 @@
   
 	<property name="addin.name" value="pipeline-lite"/>
 	<!--property name="addin.lang.ja" value="true"/-->
-	<property name="lite.lib.home" value="/Users/Romain/Public/build/litelibs"/>
-	<property name="launchers.home" value="/Users/Romain/Public/build/litelibs"/>
-	<property name="lame.home" value="/Users/Romain/Documents/Work/pipeline/release/windows/ext"/>
+	<property name="lite.lib.home" value="J:\_DAISY\daisymfcgui\libs"/>
+	<property name="launchers.home" value="J:\_DAISY\daisymfcgui\libs"/>
+	<property name="lame.home" value="C:\Program Files\LAME"/>
 
 	
 	<!-- ================================================================== -->
@@ -23,7 +23,7 @@
 			<include name="chardet.jar"/>
 			<include name="commons-cli-1.1.jar"/>
 			<include name="epubcheck-3.0.jar"/>
-			<include name="icu4j-3_8.jar"/>		
+			<include name="icu4j-66_1.jar"/>		
 			<include name="jl1.0.jar"/>
 			<include name="log4j-1.2.15.jar"/>
 			<include name="jing.jar"/>
@@ -114,7 +114,7 @@
 		<antcall target="buildReleaseDir">
 			<param name="release.dir" value="${release.dir}"/>
 		</antcall>
-		<zip destfile="${distribution.dir}/${releaseName}.zip" basedir="${distribution.dir}" includes="${releaseName}/**/*.*"/>
+		<zip destfile="${distribution.dir}/${releaseName}.zip" basedir="${distribution.dir}" includes="${releaseName}/**/*"/>
 		<delete dir="${release.dir}"/>
 	</target>
 			
@@ -169,6 +169,21 @@
 				<include name="pipeline-lite.exe"/>
 			</fileset>
 		</copy>
+		<!--  Assuming openJDK jre archive format, which start with a folder named like jdk<major>u<minor>-<build_version>-jre -->
+		<unzip dest="${release.dir}" stripAbsolutePathSpec="false">
+			<fileset dir="${base.dir}/launchers/jre_to_bundle/win32">
+    			<include name="*.zip"/>
+			</fileset>
+		</unzip>
+		<!-- renaming openjdk jre folder  to jre -->
+		<path id="jre_name">
+			<dirset dir="${release.dir}">
+				<include name="*-jre"/>
+			</dirset>
+		</path>
+		<property name="jre_name" refid="jre_name" />
+		<move file="${jre_name}" tofile="${release.dir}/jre" />
+		
 	</target>
 	<target name="buildReleaseDir-Mac" if="target.mac">
 		<!-- Mac-specific JARs -->
