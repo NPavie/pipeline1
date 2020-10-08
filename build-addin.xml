@@ -100,6 +100,15 @@
 			<param name="releaseName" value="${addin.name}-ms-${ISO-TODAY}"/>
 		</antcall>
 	</target>
+	<target name="buildDistForWin"
+			description="Builds the Pipeline Lite distribution for Windows">
+		<property name="releaseName" value="${addin.name}-ms-${ISO-TODAY}"/>
+		<property name="release.dir" value="${distribution.dir}/${releaseName}"/>
+		<antcall target="buildReleaseDir">
+			<param name="target.win" value="true"/>
+			<param name="release.dir" value="${release.dir}"/>
+		</antcall>
+	</target>
 	
 	<target name="buildForMac"
 			description="Builds a zipfile containing the Pipeline Lite distribution for Mac OS X">
