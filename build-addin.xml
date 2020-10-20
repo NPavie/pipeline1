@@ -64,6 +64,7 @@
 	<!-- Scripts -->
 	<fileset dir="${basedir}/scripts" id="fileset.addin.scripts">
 		<include name="_dev/DAISY Pipeline TTS Narrator.taskScript"/>
+		<include name="_dev/DTbook with tagged sentences.taskScript"/>
 	</fileset>
 	<fileset dir="${basedir}/scripts" id="fileset.addin.scripts.lang.ja">
 		<include name="_dev/DAISY Pipeline TTS Narrator_ja.taskScript"/>
