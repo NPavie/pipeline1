@@ -7,7 +7,7 @@
   <taskdef resource="com4j/tlbimp/ant.properties">
     <classpath>
         <fileset dir="${com4j.dir}" includes="tlbimp.jar"/>
-    </classpath>
+    </classpath> 
   </taskdef>
   
   

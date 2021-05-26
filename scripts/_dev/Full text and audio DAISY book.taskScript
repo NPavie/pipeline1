@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <taskScript version="2.0" name="dtbook2daisy3">
-	<nicename>DTbook with tagged sentences</nicename>
-	<description>Tag the sentences of a dtbook for external TTS procession</description>
+	<nicename>DAISY Pipeline TTS Narrator</nicename>
+	<description>Converts a DTBook 2005 file to a complete DAISY/NISO 2005 DTB</description>
 	<documentation uri=""/>
 		
 	<parameter name="input" value="" required="true">
@@ -14,7 +14,7 @@
 	
 	<parameter name="outputPath" value="" required="true">
 		<nicename>Output directory</nicename>
-		<description>Select directory for the output dtbook</description>
+		<description>Select directory for the output Narrator DTBs</description>
 		<datatype>
 			<directory type="output"/>
 		</datatype>
@@ -31,14 +31,14 @@
 		</datatype>
 	</parameter>
 
-	<!-- <parameter name="doSentDetection" value="true" required="false">
+	<parameter name="doSentDetection" value="true" required="false">
 		<nicename>Apply sentence detection</nicename>
 		<description>Select whether to apply sentence detection</description>
 		<datatype>
 			<boolean/>
 		</datatype>
-	</parameter> -->
-<!-- 
+	</parameter>
+
 	<parameter name="bitrate" value="32" required="false">
 		<nicename>MP3 Bitrate</nicename>
 		<description>Select output MP3 encoding bitrate</description>
@@ -50,7 +50,7 @@
 				<item nicename="128 kbit/s" value="128"/>
 			</enum>
 		</datatype>
-	</parameter> -->
+	</parameter>
 	
 	<!-- *************************
 	      DTBook Fix - run Narrator category (which *includes* repair executors)
@@ -216,7 +216,7 @@
 		</parameter>		
 		<parameter>
 			<name>doSentenceDetection</name>
-			<value>true</value>
+			<value>${doSentDetection}</value>
 		</parameter>		
 		<parameter>
 			<name>doWordDetection</name>
@@ -238,7 +238,7 @@
 		</parameter>		
 		<parameter>
 			<name>output</name>
-			<value>${outputPath}/$filename{input}</value>
+			<value>${outputPath}/pipeline__temp/tmp1/05-syncpoint.xml</value>
 		</parameter>
 	</task>
  
@@ -246,7 +246,7 @@
 	<!-- ******************
 	      SpeechGen2
 	     ****************** -->
-	<!-- <task name="se_tpb_speechgen2" interactive="false">
+	<task name="se_tpb_speechgen2" interactive="false">
 		<parameter>
 			<name>inputFilename</name>
 			<value>${outputPath}/pipeline__temp/tmp1/05-syncpoint.xml</value>
@@ -282,31 +282,31 @@
 			<value>false</value>
 		</parameter>
 		
-	</task> -->
+	</task>
 
 	<!-- ******************
 	      File Set Creator
 	     ****************** -->
-	<!-- <task name="se_tpb_filesetcreator" interactive="false">
+	<task name="se_tpb_filesetcreator" interactive="false">
 		<parameter>
 			<name>outputDirectory</name>
 			<value>${outputPath}</value>
 		</parameter>
 		<parameter>
 			<name>manuscriptFilename</name>
-			<value>${outputPath}/pipeline__temp/tmp1/05-syncpoint.xml</value>
+			<value>${outputPath}/pipeline__temp/speechgen/speechgen.xml</value>
 		</parameter>
 		<parameter>
 			<name>outputDTBFilename</name>
 			<value>${outputPath}/$filename{input}</value>
 		</parameter>		
-	</task> -->
+	</task>
 	
 	
 	<!-- *************************
 	      z3986 Validation (zedval)
 	     ************************* -->
-	<!-- <task name="int_daisy_validator" interactive="false">
+	<task name="int_daisy_validator" interactive="false">
 		<parameter>
 			<name>input</name>
 			<value>${outputPath}/speechgen.opf</value>
@@ -315,7 +315,7 @@
 			<name>abortThreshold</name>
 			<value>ERROR</value>
 		</parameter>
-	</task> -->
+	</task>
 	
 	<!-- *************************
 	      Delete temporary

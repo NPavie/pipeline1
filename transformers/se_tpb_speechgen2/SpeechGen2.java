@@ -110,7 +110,7 @@ import se_tpb_speechgen2.tts.TTSOutput;
  *
  */
 public class SpeechGen2 extends Transformer {
-	
+
 	// output of xml including smil:
 	private XMLEventFactory eventFactory;						// creates stax events to output
 	private XMLEventWriter writer;		 						// for writing stax events to file.
@@ -170,32 +170,32 @@ public class SpeechGen2 extends Transformer {
 	private int numAudioFiles;									// approx. number of resulting audio files
 	private DocumentBuilder domBuilder;							// used for constructing a small Document for each sync point.
 	private AudioFormat mSilenceFormat = 
-		new AudioFormat(22050, 16, 1,true, false);
+			new AudioFormat(22050, 16, 1,true, false);
 	private QName SMIL_SYNC_ATTR;
 	private boolean doSmilSyncAttributeBasedSyncPointLocation = false; //Which syncpoint location method to use, see #isSynchronizationPoint
 	private boolean failOnError = false;                       //Whether to abort after a TTS error
 	private SmilClock endSilencePadding = new SmilClock();  	   // add 0 milliseconds silence to each merged audio file.
-	
+
 	private CountDownLatch countOnce = new CountDownLatch(1);	// thread synchronization
 	private AudioConcatQueue audioConcatQueue = null;           // wav files concatenation and possibly mp3 encoding.
 	private AudioConcatExceptionHandler audioConcatExceptionHandler = new AudioConcatExceptionHandler();
-	
+
 	private class AudioConcatExceptionHandler implements UncaughtExceptionHandler {
-	    private boolean uncaughtException = false;
-	    private Throwable throwable = null;
-        public void uncaughtException(Thread t, Throwable e) {
-            uncaughtException = true;
-            throwable = e;
-        }
-        public boolean hasUncaughtException() {
-            return uncaughtException;
-        }
-        public Throwable getThrowable() {
-            return throwable;
-        }
+		private boolean uncaughtException = false;
+		private Throwable throwable = null;
+		public void uncaughtException(Thread t, Throwable e) {
+			uncaughtException = true;
+			throwable = e;
+		}
+		public boolean hasUncaughtException() {
+			return uncaughtException;
+		}
+		public Throwable getThrowable() {
+			return throwable;
+		}
 	}
-	
-	
+
+
 	public SpeechGen2(InputListener inListener, Boolean isInteractive) {
 		super(inListener, isInteractive);
 		eventFactory = XMLEventFactory.newInstance();
@@ -210,7 +210,7 @@ public class SpeechGen2 extends Transformer {
 	protected boolean execute(Map<String,String> parameters) throws TransformerRunException {
 		FileInputStream fis = null;
 		BookmarkedXMLEventReader reader = null;
-		
+
 		try {
 			/* get the params */
 			File configFile = new File(parameters.remove("sgConfigFilename"));
@@ -225,12 +225,12 @@ public class SpeechGen2 extends Transformer {
 					// nothing
 				}
 			}
-			
+
 			//mg200805
 			doSmilSyncAttributeBasedSyncPointLocation = Boolean.parseBoolean(parameters.remove("doSmilSyncAttributeBasedSyncPointLocation"));
 			//rd200809
 			boolean failOnError = Boolean.parseBoolean(parameters.remove("failOnError"));
-			
+
 			outputDir = new File(parameters.get("outputDirectory"));
 			if (!outputDir.exists()) {
 				outputDir.mkdirs();
@@ -240,8 +240,8 @@ public class SpeechGen2 extends Transformer {
 			mp3bitrate = Integer.parseInt(parameters.remove("mp3bitrate"));
 			audioConcatQueue = new AudioConcatQueue(countOnce, mp3bitrate);		
 			audioConcatQueue.setI18n(getI18n());
-		      
-	        // rd20090108: eager checking of lame existence
+
+			// rd20090108: eager checking of lame existence
 			if (mp3Output) {
 				String lamePath = System.getProperty("pipeline.lame.path");
 				File test = new File(lamePath);
@@ -263,7 +263,7 @@ public class SpeechGen2 extends Transformer {
 					throw new TransformerRunException(message);
 				}
 			}
-			
+
 			// validate the configuration file for ttsbuilder
 			ErrorHandler handler = new ErrorHandler() {
 				public void warning(SAXParseException e) {
@@ -277,7 +277,7 @@ public class SpeechGen2 extends Transformer {
 				}				
 				private String readable(SAXParseException e) {
 					return e.getMessage() + " at line " + e.getLineNumber() + 
-					", column " + e.getColumnNumber();
+							", column " + e.getColumnNumber();
 				}
 			};
 
@@ -294,7 +294,7 @@ public class SpeechGen2 extends Transformer {
 				String msg = "Validation process of TTS Builder configuration failed." + e.getMessage();
 				throw new TransformerRunException(msg, e);
 			}
-			
+
 			parseConfigFile(configFile.getAbsolutePath());
 
 			// copy the additional files
@@ -322,7 +322,7 @@ public class SpeechGen2 extends Transformer {
 				peek.addEvent(event);
 				xmlContext.addEvent(event);
 				if (event.isStartElement()) {
-				    StartElement se = event.asStartElement();
+					StartElement se = event.asStartElement();
 					languages.add(peek.getCurrentLocale());
 					String context = xmlContext.getContextXPath(ContextStack.XPATH_SELECT_ELEMENTS_ONLY, ContextStack.XPATH_PREDICATES_NONE);
 					if (isSynchronizationPoint(reader, se)) {
@@ -378,7 +378,7 @@ public class SpeechGen2 extends Transformer {
 						sendMessage(message, type, cause, location);
 					}
 				};
-				
+
 				// try to get a tts for the language
 				if (multiLang) {
 					try {
@@ -404,7 +404,7 @@ public class SpeechGen2 extends Transformer {
 					tts.setFailOnError(failOnError);
 					ttsEngines.put(lang.toString(), tts);
 				}
-					
+
 			}
 
 			sendMessage(i18n("FOUND_NUMBER", String.valueOf(numSPoints)), MessageEvent.Type.DEBUG);
@@ -429,13 +429,13 @@ public class SpeechGen2 extends Transformer {
 			plainReader = factory.createXMLEventReader(isr);
 			reader = new BookmarkedXMLEventReader(plainReader);
 
-			
+
 			//-----------------------------------------------------------------
 			// Load the text
 			if (!doLoadText(fis, reader)) {
 				return false;
 			}
-			
+
 			isr.close();
 			fis.close();
 			reader.close();
@@ -447,13 +447,13 @@ public class SpeechGen2 extends Transformer {
 				TTS tts = ttsEngines.get(xmlLang);
 				tts.start();
 			}
-			
+
 			// create new streams
 			fis = new FileInputStream(inputFile);
 			isr = new InputStreamReader(fis, Charset.forName(characterEncoding));
 			plainReader = factory.createXMLEventReader(isr);
 			reader = new BookmarkedXMLEventReader(plainReader);
-			
+
 			//-----------------------------------------------------------------
 			// Start the audio merger queue
 			//-----------------------------------------------------------------
@@ -461,27 +461,27 @@ public class SpeechGen2 extends Transformer {
 			t.setUncaughtExceptionHandler(audioConcatExceptionHandler);
 			t.setPriority(t.getPriority() + 1);
 			t.start();
-			
-			
-			
+
+
+
 			//---------------------------------------------------------------------------
 			// Fetch the audio
 			//---------------------------------------------------------------------------
 			sendMessage(i18n("FETCHING_AUDIO"), MessageEvent.Type.DEBUG);
-			
+
 			if (doFetchAudio(inputFile, outputFile, reader)) {
 				sendMessage(i18n("AWAIT_LAST_MERGE"), MessageEvent.Type.DEBUG);
 				mergeAudio();
 				audioConcatQueue.finish();
-				
+
 				int mergeProgress = audioConcatQueue.numFilesMerged();
 				// make sure progress does not exceed 1.
 				progress(Math.min((double) (numAudioFiles - 1) / numAudioFiles, (double) mergeProgress / numAudioFiles));
 				while (countOnce.getCount() > 0) {
 					Thread.sleep(3 * 1000);
 					if (audioConcatExceptionHandler.hasUncaughtException()) {
-					    Throwable thr = audioConcatExceptionHandler.getThrowable();
-					    throw new TransformerRunException(thr.getMessage(), thr);
+						Throwable thr = audioConcatExceptionHandler.getThrowable();
+						throw new TransformerRunException(thr.getMessage(), thr);
 					}
 					mergeProgress = audioConcatQueue.numFilesMerged();
 					progress(Math.min((double) (numAudioFiles - 1) / numAudioFiles, (double) mergeProgress / numAudioFiles));
@@ -489,8 +489,8 @@ public class SpeechGen2 extends Transformer {
 				progress(1.0);
 			}
 			sendMessage(i18n("DONE"), MessageEvent.Type.DEBUG);
-			
-			
+
+
 		}  catch (TransformerRunException e) {
 			audioConcatQueue.abort();
 			throw e;
@@ -498,7 +498,7 @@ public class SpeechGen2 extends Transformer {
 			audioConcatQueue.abort();
 			throw new TransformerRunException(e.getMessage(), e);
 		}  finally {
-		
+
 			try {
 				closeStreams(fis, reader);
 			} catch (XMLStreamException e) {
@@ -509,9 +509,9 @@ public class SpeechGen2 extends Transformer {
 				throw new TransformerRunException(e.getMessage(), e);
 			}
 			terminateTTSInstances();
-			
+
 			deleteTempDirs();
-			
+
 			sendMessage("Leaving SpeechGen2", MessageEvent.Type.DEBUG);
 		}
 
@@ -548,10 +548,10 @@ public class SpeechGen2 extends Transformer {
 				}
 
 				if (isAnnouncement(se)) {
-					 before.add(se);
-					 after.push(se);
-					 afterLevels.push(new
-					 Integer(xmlContext.getContext().size()));
+					before.add(se);
+					after.push(se);
+					afterLevels.push(new
+							Integer(xmlContext.getContext().size()));
 					Stack<Boolean> ann = annMap.get(se.getName());
 					if (ann == null) {
 						ann = new Stack<Boolean>();
@@ -569,7 +569,7 @@ public class SpeechGen2 extends Transformer {
 					synchronizationPointCounter++;
 					//System.err.println("TTS Progress: " + synchronizationPointCounter + " / " + numSPoints);
 					//System.err.println("Merge/LAME Progress: " + audioConcatQueue.numFilesMerged() + " / ~" + numAudioFiles);
-										
+
 					// first phrase in a file
 					boolean isFirst = workingFiles.size() == 0;						
 					SmilClock smilTimeStartValue = null;
@@ -578,7 +578,7 @@ public class SpeechGen2 extends Transformer {
 					} catch (Exception e) {
 						throw new TransformerRunException(e.getMessage(), e);
 					}
-					
+
 					if (isFirst) {
 						addSilence(AFTER_FIRST, mSilenceFormat);
 					}
@@ -596,7 +596,7 @@ public class SpeechGen2 extends Transformer {
 					checkAbort();
 					double progress = Math.min(0.99, (double) audioConcatQueue.numFilesMerged() / numAudioFiles);
 					progress(progress);
-					
+
 					// create the new startElement, i e. the same element + smil-attributes.
 					SmilClock smilStartClipTime = smilTimeStartValue.floorToMSPrecision();
 					SmilClock smilEndClipTime = clock.floorToMSPrecision();
@@ -607,22 +607,22 @@ public class SpeechGen2 extends Transformer {
 					boolean writeToFile = true;
 					fastForward(reader, writeToFile);
 				} else {
-				    // LE 2008-11-05: This is not a sync point. If there still is
-				    // a smil:sync attribute on this element we must remove it to
-				    // avoid NPEs in fileset creator
-				    Attribute smiSyncAttr = AttributeByName.get(SMIL_SYNC_ATTR, se);
-				    if (smiSyncAttr != null) {
-				        List<Attribute> attrs = new ArrayList<Attribute>();
-				        for (Iterator<Attribute> it = se.getAttributes(); it.hasNext(); ) {
-				            Attribute attr = it.next();
-				            if (!attr.getName().equals(SMIL_SYNC_ATTR)) {
-				                attrs.add(attr);
-				            }
-				        }
-				        event = eventFactory.createStartElement(se.getName(), attrs.iterator(), se.getNamespaces());
-				    }
+					// LE 2008-11-05: This is not a sync point. If there still is
+					// a smil:sync attribute on this element we must remove it to
+					// avoid NPEs in fileset creator
+					Attribute smiSyncAttr = AttributeByName.get(SMIL_SYNC_ATTR, se);
+					if (smiSyncAttr != null) {
+						List<Attribute> attrs = new ArrayList<Attribute>();
+						for (Iterator<Attribute> it = se.getAttributes(); it.hasNext(); ) {
+							Attribute attr = it.next();
+							if (!attr.getName().equals(SMIL_SYNC_ATTR)) {
+								attrs.add(attr);
+							}
+						}
+						event = eventFactory.createStartElement(se.getName(), attrs.iterator(), se.getNamespaces());
+					}
 				}
-				    
+
 
 			} else if (event.isStartDocument()) {
 				XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
@@ -659,7 +659,7 @@ public class SpeechGen2 extends Transformer {
 		return true;
 	}
 
-	
+
 	private boolean doLoadText(FileInputStream fis, BookmarkedXMLEventReader reader) throws XMLStreamException, IOException, TransformerRunException {
 		while (reader.hasNext()) {
 			XMLEvent event = reader.nextEvent();
@@ -667,17 +667,17 @@ public class SpeechGen2 extends Transformer {
 
 			if (event.isStartElement()) {
 				StartElement se = event.asStartElement();
-				
+
 				String context = xmlContext.getContextXPath(ContextStack.XPATH_SELECT_ELEMENTS_ONLY, ContextStack.XPATH_PREDICATES_NONE);
 				if (isMergeAudio(se, context)) {
 					// mergeAudio();
 				}
 
 				if (isAnnouncement(se)) {
-					 before.add(se);
-					 after.push(se);
-					 afterLevels.push(new
-					 Integer(xmlContext.getContext().size()));
+					before.add(se);
+					after.push(se);
+					afterLevels.push(
+							new Integer(xmlContext.getContext().size()));
 					Stack<Boolean> ann = annMap.get(se.getName());
 					if (ann == null) {
 						ann = new Stack<Boolean>();
@@ -704,7 +704,7 @@ public class SpeechGen2 extends Transformer {
 						// exit the loop by returning false.
 						return false;
 					}
-					
+
 					event = null; // to avoid being written to file once more
 					boolean writeToFile = false;
 					fastForward(reader, writeToFile);
@@ -753,7 +753,7 @@ public class SpeechGen2 extends Transformer {
 			loc=newloc;
 		}
 		scope.setUserData("location", loc, null);
-		
+
 		List<StartElement> terminations = new ArrayList<StartElement>();
 
 		int minLevel = getMinLevelBeforeNextSynchronization(reader);
@@ -777,7 +777,7 @@ public class SpeechGen2 extends Transformer {
 		// choose tts
 		TTS tts = ttsEngines.get(lang.replace('-', '_'));
 
-		
+
 
 		/*
 		 * Introductions
@@ -795,7 +795,7 @@ public class SpeechGen2 extends Transformer {
 		file = getNextTempAudioFile(false);
 		file.deleteOnExit();
 		tts.addSyncPoint(scope, file);
-		
+
 		/*
 		 * Terminations
 		 */
@@ -805,7 +805,7 @@ public class SpeechGen2 extends Transformer {
 			tts.addAnnouncements(terminations, announceAfter, file);
 		}
 	}
-	
+
 	/**
 	 * Fetches speech for the synchronization point represented by <code>se</code>
 	 * and possibly announcements.
@@ -847,7 +847,7 @@ public class SpeechGen2 extends Transformer {
 		TTS tts = ttsEngines.get(lang.replace('-', '_'));		
 		File file = null;
 		File temp = null;
-		
+
 		SmilClock startValue = clock;
 		SmilClock duration = new SmilClock();
 
@@ -859,14 +859,14 @@ public class SpeechGen2 extends Transformer {
 		 * Introductions
 		 */		
 		if (introductions.size() > 0) {
-			
+
 			temp = getSilentFile(BEFORE_ANNOUNCEMENT, mSilenceFormat);
 			synchPointClock = synchPointClock.addTime(BEFORE_ANNOUNCEMENT);
 			synchPointFiles.add(temp);
 
-			
+
 			ttsOutput = tts.getNext();
-			
+
 			duration = ttsOutput.getDuration();
 			file = ttsOutput.getFile();
 			introductions.clear();
@@ -875,7 +875,7 @@ public class SpeechGen2 extends Transformer {
 			} else {
 				synchPointFiles.add(file);
 				synchPointClock = synchPointClock.addTime(duration);
-				
+
 				temp = getSilentFile(AFTER_ANNOUNCEMENT, mSilenceFormat);
 				synchPointFiles.add(temp);
 				synchPointClock = synchPointClock.addTime(AFTER_ANNOUNCEMENT);
@@ -885,7 +885,7 @@ public class SpeechGen2 extends Transformer {
 		/*
 		 * Common phrase
 		 */
-		
+
 		ttsOutput = tts.getNext();
 		duration = ttsOutput.getDuration();
 		file = ttsOutput.getFile();
@@ -898,7 +898,7 @@ public class SpeechGen2 extends Transformer {
 		temp = getSilentFile(AFTER_REGULAR_PHRASE, mSilenceFormat);
 		synchPointFiles.add(temp);
 		synchPointClock = synchPointClock.addTime(AFTER_REGULAR_PHRASE);
-		
+
 		/*
 		 * Terminations
 		 */
@@ -907,9 +907,9 @@ public class SpeechGen2 extends Transformer {
 			temp = getSilentFile(BEFORE_ANNOUNCEMENT, mSilenceFormat);
 			synchPointFiles.add(temp);
 			synchPointClock = synchPointClock.addTime(BEFORE_ANNOUNCEMENT);
-			
+
 			ttsOutput = tts.getNext();
-			
+
 			file = ttsOutput.getFile();
 			duration = ttsOutput.getDuration(); 
 			terminations.clear();
@@ -919,13 +919,13 @@ public class SpeechGen2 extends Transformer {
 			} else {
 				synchPointFiles.add(file);
 				synchPointClock = synchPointClock.addTime(duration);
-				
+
 				temp = getSilentFile(AFTER_ANNOUNCEMENT, mSilenceFormat);
 				synchPointFiles.add(temp);
 				synchPointClock = synchPointClock.addTime(AFTER_ANNOUNCEMENT);
 			}
 		}
-		
+
 		// check if there is a need to merge the audio before
 		// adding this last phrase to the set of files yet 
 		// to be merged.
@@ -978,12 +978,12 @@ public class SpeechGen2 extends Transformer {
 			wf.add(getSilentFile(endSilencePadding, mSilenceFormat));
 		}
 
-		
+
 		File mp3file = null;
 		if (mp3Output) {
 			mp3file = goMp3(currentAudioFile);
 		}
-		
+
 		audioConcatQueue.addAudio(wf, currentAudioFile, mp3file);	
 
 		workingFiles.clear();
@@ -1288,7 +1288,7 @@ public class SpeechGen2 extends Transformer {
 	 */
 	/*
 	private File getSilentFile(int timeMillis, File audioFileModel) throws IOException, UnsupportedAudioFileException {
-		
+
 		if (workingFiles.size() < 1 && null == audioFileModel) {
 			//return null;
 			throw new IOException("No file format available for silence!");
@@ -1299,13 +1299,13 @@ public class SpeechGen2 extends Transformer {
 			throw new IOException("Not possible to produce " + timeMillis + "ms of silence, must be >= 0.");
 		} 
 
-		
+
 		File model = audioFileModel != null ? audioFileModel : (File) workingFiles.get(0);
 		File target = getNextTempAudioFile(false);
 		return AudioFiles.getSilentAudio(target, timeMillis, model);
 	}
-	*/
-	
+	 */
+
 	private File getSilentFile(SmilClock timeMillis, AudioFormat format) throws IOException, UnsupportedAudioFileException {
 		File target = getNextTempAudioFile(false);
 		target.deleteOnExit();
@@ -1325,7 +1325,7 @@ public class SpeechGen2 extends Transformer {
 		clock = clock.addTime(timeMillis);
 		workingFiles.add(silentFile);
 	}
-	
+
 
 	/**
 	 * Returns a substitute for <code>event</code> to be written to the output file.
@@ -1418,7 +1418,7 @@ public class SpeechGen2 extends Transformer {
 		}
 		return isSynchronizationPointOld(reader, se);
 	}
-	
+
 	/**
 	 * Alternate method to {@link #isSynchronizationPointOld(BookmarkedXMLEventReader, StartElement)} 
 	 * that relies on smil:sync attributes sitting on input nodes.
@@ -1427,14 +1427,14 @@ public class SpeechGen2 extends Transformer {
 	private final static String SYNCPOINT_GETTER_BOOKMK = "Narrator.SpeechGenerator.getSynchronizationPoint";
 	private File inputFile;
 	private boolean isSynchronizationPointNew(BookmarkedXMLEventReader reader, StartElement se) throws XMLStreamException {
-		
+
 		Attribute s = AttributeByName.get(SMIL_SYNC_ATTR, se);
 		if(s==null) return false;
-		
+
 		//we have a smil:sync attribute on this start element, 
 		//make sure there are non-whitespace characters
 		//TODO or are whitespace-only nodes filtered later?
-		
+
 		reader.setBookmark(SYNCPOINT_GETTER_BOOKMK);
 		int elemCount = 1;
 		String textContent = "";
@@ -1449,20 +1449,20 @@ public class SpeechGen2 extends Transformer {
 			}
 		}
 		reader.gotoAndRemoveBookmark(SYNCPOINT_GETTER_BOOKMK);
-		
+
 		// LE 2008-10-26: support forced sync on empty elements
-        if (textContent.length() == 0) {
-            return true;
-        }
-		
+		if (textContent.length() == 0) {
+			return true;
+		}
+
 		for (int i = 0; i < textContent.codePointCount(0, textContent.length()-1); i++) {
 			int cp = textContent.codePointAt(i);
 			if(!Character.isWhitespace(cp)) return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Returns the sum of lengths of the files pointed at by <code>it</code>.
 	 * @param it An iterator over some files.
@@ -1608,7 +1608,7 @@ public class SpeechGen2 extends Transformer {
 		if (fis != null) {
 			fis.close();	
 		}
-		
+
 		if (reader != null) {
 			reader.close();
 		}
@@ -1635,13 +1635,13 @@ public class SpeechGen2 extends Transformer {
 				exceptions.add(e);
 			}
 		}
-		
+
 		if (exceptions.size() > 0) {
 			TTSException cause = (TTSException) exceptions.get(0);
 			throw new TransformerRunException(cause.getMessage(), cause);
 		}
 	}
-	
+
 	/**
 	 * Deletes the temp dirs created during the TTS generation.
 	 * @return <code>true</code> if the deletion was successful, <code>false</code> otherwise
