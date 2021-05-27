@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/8.0.265.hs-adpt">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry excluding="**/.DS_Store" kind="src" path="src"/>
 	<classpathentry excluding="**/.DS_Store" kind="src" output="transformers" path="transformers"/>
@@ -21,27 +17,27 @@
 	<classpathentry exported="true" kind="lib" path="lib/saxon8.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/saxon8-dom.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/serializer.jar"/>
-	<classpathentry kind="lib" path="lib/slf4j-api-1.5.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/slf4j-api-1.5.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/stax-api-1.0.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/tagsoup-1.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/tritonus_remaining-0.3.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/tritonus_share-0.3.6.jar"/>
-	<classpathentry kind="lib" path="lib/wstx-lgpl-3.2.8.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/wstx-lgpl-3.2.8.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/xalan.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/xercesImpl.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/zedval.jar"/>
 	<classpathentry exported="true" kind="lib" path="transformers/int_daisy_filesetAudioTagger/lib/jaudiotagger.jar"/>
 	<classpathentry exported="true" kind="lib" path="transformers/se_tpb_speechgen2/lib/com4j.jar"/>
-	<classpathentry kind="lib" path="lib/louisFat.jar"/>
-	<classpathentry kind="src" path="test"/>
-	<classpathentry kind="lib" path="lib/junit-4.7.jar"/>
-	<classpathentry kind="lib" path="transformers/int_vspiewak_odt2daisy/lib/odt2daisy.jar"/>
-	<classpathentry kind="lib" path="lib/brailleUtils-catalog.jar"/>
-	<classpathentry kind="lib" path="lib/brailleUtils-core.jar"/>
-	<classpathentry kind="lib" path="lib/texhyphj.jar"/>
-	<classpathentry kind="lib" path="lib/isorelax.jar"/>
-	<classpathentry kind="lib" path="lib/jing.jar"/>
-	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
-	<classpathentry kind="lib" path="lib/icu4j-66_1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/louisFat.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/junit-4.7.jar"/>
+	<classpathentry exported="true" kind="lib" path="transformers/int_vspiewak_odt2daisy/lib/odt2daisy.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/brailleUtils-catalog.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/brailleUtils-core.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/texhyphj.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/isorelax.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jing.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/xml-apis.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/icu4j-66_1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-io-2.8.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>true</dontWrapJar>
+  <headerType>console</headerType>
+  <jar>lib\org.daisy.pipeline.lite-0.0.1-SNAPSHOT.jar</jar>
+  <outfile>..\libs\pipeline-lite.exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir></chdir>
+  <priority>normal</priority>
+  <downloadUrl>https://adoptopenjdk.net/</downloadUrl>
+  <supportUrl></supportUrl>
+  <stayAlive>true</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
+  <manifest></manifest>
+  <icon>src\org\daisy\pipeline\lite\internal\pipeline-logo-256.ico</icon>
+  <classPath>
+    <mainClass>org.daisy.pipeline.lite.PipelineLiteCLI</mainClass>
+    <cp>.</cp>
+    <cp>./lib/*.jar</cp>
+  </classPath>
+  <jre>
+    <path>jre</path>
+    <bundledJre64Bit>false</bundledJre64Bit>
+    <bundledJreAsFallback>false</bundledJreAsFallback>
+    <minVersion>1.5.0</minVersion>
+    <maxVersion></maxVersion>
+    <jdkPreference>preferJre</jdkPreference>
+    <runtimeBits>32/64</runtimeBits>
+  </jre>
+</launch4jConfig>

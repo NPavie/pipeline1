@@ -17,12 +17,12 @@
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.platform</groupId>
-				<artifactId>org.eclipse.swt.browser.chromium.win32.win32.x86_64</artifactId>
+				<artifactId>org.eclipse.swt.browser.chromium.${osgi.platform}</artifactId>
 				<version>3.115.100</version>
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.platform</groupId>
-				<artifactId>org.eclipse.swt.win32.win32.x86_64</artifactId>
+				<artifactId>org.eclipse.swt.${osgi.platform}</artifactId>
 				<version>3.115.100</version>
 			</dependency>
 			<dependency>
@@ -62,12 +62,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.platform</groupId>
-			<artifactId>org.eclipse.swt.browser.chromium.win32.win32.x86_64</artifactId>
+			<artifactId>org.eclipse.swt.browser.chromium.${osgi.platform}</artifactId>
 			<version>3.115.100</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.platform</groupId>
-			<artifactId>org.eclipse.swt.win32.win32.x86_64</artifactId>
+			<artifactId>org.eclipse.swt.${osgi.platform}</artifactId>
 			<version>3.115.100</version>
 		</dependency>
 		<dependency>
@@ -149,6 +149,10 @@
 								<resource>
 									<directory>org.daisy.pipeline.lite/target</directory>
 									<include>*.jar</include>
+								</resource>
+								<resource>
+									<directory>org.daisy.pipeline.lite/rsrc</directory>
+									<include>*.properties</include>
 								</resource>
 							</resources>
 						</configuration>

@@ -7,3 +7,5 @@
 /doc/api
 /samples/output
 /transformers/org_pef_dtbook2pef/apidoc
+/daisymfcgui/libs/*
+!/daisymfcgui/libs/.gitkeep

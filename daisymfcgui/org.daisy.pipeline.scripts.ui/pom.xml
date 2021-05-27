@@ -6,6 +6,37 @@
 	<artifactId>org.daisy.pipeline.scripts.ui</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Scripts UI</name>
+	
+	<repositories>  
+    <repository>  
+      <id>jboss-public-repository-group</id>  
+      <name>JBoss Public Repository Group</name>  
+      <url>https://repository.jboss.org/nexus/content/groups/public/</url>  
+      <layout>default</layout>  
+      <releases>  
+        <enabled>true</enabled>  
+        <updatePolicy>never</updatePolicy>  
+      </releases>  
+      <snapshots>  
+        <enabled>true</enabled>  
+        <updatePolicy>never</updatePolicy>  
+      </snapshots>  
+    </repository>  
+  </repositories>  
+  <pluginRepositories>  
+    <pluginRepository>  
+      <id>jboss-public-repository-group</id>  
+      <name>JBoss Public Repository Group</name>  
+      <url>https://repository.jboss.org/nexus/content/groups/public/</url>  
+      <releases>  
+        <enabled>true</enabled>  
+      </releases>  
+      <snapshots>  
+        <enabled>true</enabled>  
+      </snapshots>  
+    </pluginRepository>  
+  </pluginRepositories>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.eclipse.platform</groupId>
@@ -51,11 +82,11 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/../../dist/pipeline.jar</systemPath>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/javax.xml.stream/stax-api -->
+		<!-- https://mvnrepository.com/artifact/javax.xml.stream/javax.xml.stream -->
 		<dependency>
-			<groupId>javax.xml.stream</groupId>
-			<artifactId>stax-api</artifactId>
-			<version>1.0-2</version>
+		    <groupId>javax.xml.stream</groupId>
+		    <artifactId>javax.xml.stream</artifactId>
+		    <version>1.0.1.v201004272200</version>
 		</dependency>
 		<dependency>
 			<groupId>org.daisy.pipeline</groupId>
